@@ -41,7 +41,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg
 
 /* Mode tabs */
 #tabs{display:flex;gap:6px}
-.tab{flex:1;padding:8px 4px;border-radius:50px;border:2px solid var(--bo);background:var(--card);font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:.76rem;font-weight:700;color:var(--t2);cursor:pointer;text-align:center;transition:all .15s}
+.tab{flex:1;padding:6px 2px;border-radius:12px;border:2px solid var(--bo);background:var(--card);font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:.72rem;font-weight:700;color:var(--t2);cursor:pointer;text-align:center;transition:all .15s;line-height:1.3}
 .tab.on{border-color:var(--pr);background:var(--pl);color:var(--pr)}
 .tab:active{transform:scale(.94)}
 
@@ -212,15 +212,24 @@ textarea.tall{height:110px}
 
 <!-- Tabs -->
 <div id="tabs">
-  <button class="tab on" id="t-game">🎮 練習</button>
-  <button class="tab" id="t-lib">💎 字庫</button>
-  <button class="tab" id="t-gram">📝 文法庫</button>
-  <button class="tab" id="t-gems">🏆 寶石金庫</button>
-  <button class="tab" id="t-rec">📊 記錄</button>
+  <button class="tab on" id="t-game"><div>🎮</div><div>練習</div><div style="font-size:.55rem;opacity:.7">Practice</div></button>
+  <button class="tab" id="t-lib"><div>💎</div><div>字庫</div><div style="font-size:.55rem;opacity:.7">Vocabulary</div></button>
+  <button class="tab" id="t-gram"><div>📝</div><div>文法庫</div><div style="font-size:.55rem;opacity:.7">Grammar</div></button>
+  <button class="tab" id="t-gems"><div>🏆</div><div>寶石</div><div style="font-size:.55rem;opacity:.7">Diamonds</div></button>
+  <button class="tab" id="t-rec"><div>🫙</div><div>玻璃寶盒</div><div style="font-size:.55rem;opacity:.7">Glass Box</div></button>
+</div>
+
+<!-- Review screen (shown on first load) -->
+<div id="review-screen" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:800;overflow-y:auto;padding:1rem;pointer-events:none">
+  <div style="background:var(--card);border-radius:var(--r);border:1.5px solid var(--bo);padding:1rem;max-width:480px;margin:0 auto">
+    <div style="font-size:.95rem;font-weight:900;color:var(--tx);text-align:center;margin-bottom:.6rem">📖 今日單字複習</div>
+    <div id="review-word-list" style="margin-bottom:.8rem"></div>
+    <button id="review-start-btn" style="background:linear-gradient(135deg,var(--pr),#FF6B35);color:#fff;border:none;border-radius:50px;padding:14px 0;font-size:1rem;font-weight:900;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif;width:100%;box-shadow:0 4px 16px rgba(255,107,53,.4)">✅ 準備好了！開始挑戰 💪</button>
+  </div>
 </div>
 
 <!-- Library -->
-<div id="lib"></div>
+<div id="lib" style="display:none"></div>
 
 <!-- Grammar panel -->
 <div id="gram-panel" style="display:none"></div>
@@ -236,6 +245,7 @@ textarea.tall{height:110px}
   <div id="pills">
     <div class="pill">🏆 <span id="sc">0</span> 分</div>
     <div class="pill" id="pw-btn" style="cursor:pointer">❌ <span id="wc">0</span> 答錯</div>
+    <div class="pill" id="hint-btn" style="cursor:pointer;background:var(--bll);border-color:var(--bl);color:#185FA5">🧚 使用複習小天使</div>
   </div>
 
   <div id="dots"></div>
@@ -310,6 +320,19 @@ textarea.tall{height:110px}
   </div>
 </div>
 
+<!-- Glass box detail modal -->
+<div id="box-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;justify-content:center;align-items:flex-start;overflow-y:auto;padding:1rem">
+  <div style="background:var(--card);border-radius:var(--r);padding:1.2rem;max-width:380px;width:95%;margin:0 auto;animation:popIn .3s ease">
+    <div style="text-align:center;margin-bottom:.5rem">
+      <div id="box-modal-title" style="font-size:1rem;font-weight:900;color:#0288D1">🫙 玻璃寶盒</div>
+      <div id="box-modal-info" style="font-size:.72rem;color:var(--t2);margin-top:.2rem"></div>
+    </div>
+    <div style="font-size:.7rem;color:var(--t2);text-align:center;margin-bottom:.5rem">長按拖拉可以排成喜歡的形狀 ✦</div>
+    <div id="box-gem-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;min-height:120px;margin-bottom:.8rem;position:relative"></div>
+    <button id="box-modal-close" style="background:linear-gradient(135deg,#4FC3F7,#0288D1);color:#fff;border:none;border-radius:50px;padding:10px 0;font-size:.88rem;font-weight:700;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif;width:100%">關閉</button>
+  </div>
+</div>
+
 <!-- Lynn manual gem modal -->
 <div id="lynn-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;justify-content:center;align-items:center">
   <div style="background:var(--card);border-radius:var(--r);padding:1.4rem 1.2rem;max-width:340px;width:92%;animation:popIn .3s ease">
@@ -330,18 +353,6 @@ textarea.tall{height:110px}
 </div>
 
 <script>
-window.addEventListener('error',function(e){
-  var msg=document.createElement('div');
-  msg.style.cssText='position:fixed;top:0;left:0;right:0;background:#c0392b;color:#fff;padding:10px;font-size:12px;z-index:9999;word-break:break-all;white-space:pre-wrap';
-  msg.textContent='ERROR:\n'+e.message+'\nFile: '+e.filename+'\nLine: '+e.lineno+'\nCol: '+e.colno+'\n'+(e.error?e.error.stack:'');
-  document.body.appendChild(msg);
-},true);
-window.addEventListener('unhandledrejection',function(e){
-  var msg=document.createElement('div');
-  msg.style.cssText='position:fixed;top:0;left:0;right:0;background:#8e44ad;color:#fff;padding:10px;font-size:12px;z-index:9999;word-break:break-all;white-space:pre-wrap';
-  msg.textContent='PROMISE ERROR:\n'+(e.reason&&e.reason.stack?e.reason.stack:String(e.reason));
-  document.body.appendChild(msg);
-},true);
 
 // ═══════════════════════════
 //  PHONICS RULES
@@ -637,6 +648,14 @@ const DEFAULT_WORDS=[
   {word:'near',zh:'靠近的',emoji:'📍',cat:'形容詞'},
   {word:'little',zh:'小的',emoji:'🐣',cat:'形容詞'},
   {word:'safe',zh:'安全的',emoji:'🛡️',cat:'形容詞'},
+  {word:'still',zh:'仍然/靜止',emoji:'🧘',cat:'形容詞'},
+  {word:'early',zh:'早',emoji:'🌅',cat:'形容詞'},
+  {word:'friend',zh:'朋友',emoji:'👫',cat:'其他'},
+  {word:'answer',zh:'回答/答案',emoji:'💬',cat:'育'},
+  {word:'hurry',zh:'趕快',emoji:'🏃',cat:'行'},
+  {word:'together',zh:'一起',emoji:'🤝',cat:'其他'},
+  {word:'taipei',zh:'台北',emoji:'🏙️',cat:'其他'},
+  {word:'taiwan',zh:'台灣',emoji:'🇹🇼',cat:'其他'},
   {word:'beak',zh:'鳥嘴',emoji:'🐦',cat:'動物'},
   {word:'feather',zh:'羽毛',emoji:'🪶',cat:'動物'},
   {word:'leave',zh:'離開/葉子',emoji:'🍃',cat:'自然'},
@@ -646,7 +665,7 @@ const DEFAULT_WORDS=[
   {word:'hospital',zh:'醫院',emoji:'🏥',cat:'健康'},
 ];
 // Force reset words to latest DEFAULT_WORDS (version bump)
-const WORDS_VER=11;
+const WORDS_VER=13;
 if(S.wordsVer!==WORDS_VER){
   if(!S.words||!S.words.length){
     S.words=DEFAULT_WORDS;
@@ -784,6 +803,15 @@ const DFLT_G=[
   {q:'He ___ his homework yesterday.',c:['do','does','did'],a:2,ex:'do 的過去式是 did',lv:'A1+'},
   {q:'___ you eat breakfast today?',c:['Do','Did','Does'],a:1,ex:'問過去的事用 Did',lv:'A1+'},
   {q:'She ___ not go to school today.',c:['do','does','did'],a:1,ex:'否定句：She does not（現在式第三人稱單數）',lv:'A1+'},
+  // ── 祈使句 Imperative ──
+  {q:'___ the door, please.',c:['Open','Opens','Opening'],a:0,ex:'祈使句用動詞原形開頭，表示請求或命令',lv:'A1'},
+  {q:'___ your hands before eating.',c:['Wash','Washes','Washing'],a:0,ex:'祈使句直接用動詞原形，不需要主詞',lv:'A1'},
+  {q:'___ run in the classroom.',c:["Don't","Doesn't","Didn't"],a:0,ex:"否定祈使句用 Don't + 動詞原形",lv:'A1'},
+  {q:'___ quiet, please.',c:['Be','Is','Are'],a:0,ex:'be 動詞的祈使句也用原形 Be',lv:'A1'},
+  {q:'___ your homework first.',c:['Do','Does','Did'],a:0,ex:'祈使句用動詞原形，叫人去做某事',lv:'A1'},
+  {q:'___ talk in class.',c:["Don't","Doesn't","No"],a:0,ex:"否定祈使句：Don't + 動詞原形",lv:'A1'},
+  {q:'___ up early tomorrow.',c:['Wake','Wakes','Waking'],a:0,ex:'祈使句用動詞原形，不加 s',lv:'A1+'},
+  {q:'___ your bag to school.',c:['Bring','Brings','Brought'],a:0,ex:'祈使句用動詞原形',lv:'A1+'},
 ];
 if(!S.grams){S.grams=DFLT_G;try{localStorage.setItem(SK,JSON.stringify(S));}catch(e){}}
 let grams=S.grams;
@@ -1203,26 +1231,6 @@ function renderGemsPanel(){
     p.appendChild(grid);
   }
 
-  // Glass boxes section
-  const boxes=S.glassBoxes||[];
-  if(boxes.length){
-    const bt=document.createElement('div');
-    bt.style.cssText='font-size:.78rem;font-weight:900;color:#0288D1;margin:.6rem 0 .4rem;border-top:1px solid var(--bo);padding-top:.6rem';
-    bt.textContent='🫙 玻璃寶盒收藏';
-    p.appendChild(bt);
-    const bgrid=document.createElement('div');
-    bgrid.style.cssText='display:grid;grid-template-columns:repeat(3,1fr);gap:10px';
-    boxes.forEach((box,i)=>{
-      const card=document.createElement('div');
-      card.className='gem-card';
-      card.style.cssText='background:linear-gradient(135deg,#E3F2FD,#B3E5FC);border-color:#4FC3F7;cursor:pointer;border-radius:var(--r);padding:.7rem .4rem;text-align:center';
-      card.innerHTML=`<span class="gem-icon">🫙</span><div class="gem-name">寶盒 #${i+1}</div><div class="gem-num">${box.date}</div>`;
-      card.addEventListener('click',()=>showBoxDetail(box,i+1));
-      bgrid.appendChild(card);
-    });
-    p.appendChild(bgrid);
-  }
-
   // 自主閱讀 button
   const readSep=document.createElement('div');
   readSep.style.cssText='border-top:1px solid var(--bo);margin:.8rem 0 .5rem';
@@ -1313,12 +1321,71 @@ function showGemDetail(gem,num){
 }
 
 function showBoxDetail(box,num){
-  document.getElementById('gm-icon').textContent='🫙';
-  document.getElementById('gm-name').textContent='玻璃寶盒 #'+num;
-  document.getElementById('gm-date').textContent='🗓 兌換日期：'+box.date;
-  const typeLabel=box.type==='green'?'🟢 換了一個綠點點':'🛁 換了延後10分鐘洗澡';
-  document.getElementById('gm-num').textContent=typeLabel+'　'+box.gems.map(g=>g.icon).join('');
-  document.getElementById('gem-modal').classList.add('show');
+  try{
+    const typeLabel=box.type==='green'?'🟢 換了一個綠點點':'🛁 換了延後10分鐘洗澡';
+    document.getElementById('box-modal-title').textContent='🫙 玻璃寶盒 #'+num;
+    document.getElementById('box-modal-info').textContent=typeLabel+'　📅 '+(box.date||'');
+
+    const grid=document.getElementById('box-gem-grid');
+    grid.innerHTML='';
+
+    const gems=box.gems||[];
+    if(!gems.length){
+      grid.innerHTML='<div style="color:var(--t2);font-size:.82rem;text-align:center;padding:.5rem">沒有寶石資料</div>';
+      document.getElementById('box-modal').style.display='flex';
+      return;
+    }
+
+    if(!box.order||box.order.length!==gems.length){
+      box.order=gems.map(function(_,i){return i;});
+    }
+    let order=box.order.slice();
+
+    function renderBoxGems(){
+      grid.innerHTML='';
+      let dragIdx=null;
+      order.forEach(function(gi,pos){
+        const gem=gems[gi];
+        if(!gem) return;
+        const rt=RARITY.find(function(r){return r.id===gem.rarity;})||RARITY[0];
+        const cell=document.createElement('div');
+        cell.dataset.pos=String(pos);
+        cell.style.cssText='background:'+rt.bg+';border:2px solid '+rt.border+';border-radius:var(--rs);padding:.5rem .2rem;text-align:center;cursor:grab;user-select:none;-webkit-user-select:none;box-shadow:'+rt.glow;
+        cell.innerHTML='<div style="font-size:1.6rem">'+gem.icon+'</div>'
+          +'<div style="font-size:.58rem;font-weight:700;color:var(--tx);margin-top:.1rem">'+(gem.name||'').split(' ')[0]+'</div>'
+          +'<div style="font-size:.52rem;color:'+rt.border+';font-weight:900">'+rt.star+'</div>';
+
+        cell.addEventListener('touchstart',function(){
+          dragIdx=pos;
+          cell.style.opacity='0.5';cell.style.transform='scale(1.1)';
+        },{passive:true});
+        cell.addEventListener('touchmove',function(e){
+          const t=e.touches[0];
+          const el=document.elementFromPoint(t.clientX,t.clientY);
+          const target=el&&el.closest('[data-pos]');
+          if(target){
+            const tp=parseInt(target.dataset.pos);
+            if(!isNaN(tp)&&tp!==dragIdx){
+              const tmp=order[dragIdx];order[dragIdx]=order[tp];order[tp]=tmp;
+              dragIdx=tp;
+              box.order=order.slice();sv();
+              renderBoxGems();
+            }
+          }
+        },{passive:false});
+        cell.addEventListener('touchend',function(){
+          cell.style.opacity='';cell.style.transform='';dragIdx=null;
+        },{passive:true});
+
+        grid.appendChild(cell);
+      });
+    }
+
+    renderBoxGems();
+    document.getElementById('box-modal').style.display='flex';
+  }catch(e){
+    showMsg('無法開啟寶盒：'+e.message);
+  }
 }
 
 function redeemGems(type){
@@ -1362,15 +1429,6 @@ function addCorrect(wordLabel){
   if(!S.totalCorrect)S.totalCorrect=0;
   S.totalCorrect++;
   sv();renderHeader();updateProg();
-  // 每10題一輪，一天可以玩兩輪（最多20題）
-  const c=s.c;
-  if(c===10&&!bathDone){
-    bathDone=true;
-    setTimeout(function(){showFin(1);},600);
-  } else if(c===20&&!bathDone2){
-    bathDone2=true;
-    setTimeout(function(){showFin(2);},600);
-  }
 }
 function addWrongSt(){todaySt().w++;sv();}
 function updateProg(){
@@ -1394,7 +1452,13 @@ function weekTotal(){
 //  TABS
 // ═══════════════════════════
 function showTab(t){
-  ['game','lib','gram-panel','gems','rec'].forEach(x=>{
+  // Always restore tabs and prog when switching
+  document.getElementById('tabs').style.display='flex';
+  document.getElementById('prog').style.display='block';
+  const rs=document.getElementById('review-screen');
+  if(rs){rs.style.display='none';rs.style.pointerEvents='none';}
+
+  ['game','lib','gram-panel','gems','rec'].forEach(function(x){
     const id=x==='game'?'game-wrap':x;
     const el=document.getElementById(id);
     if(el)el.style.display=x===t?'block':'none';
@@ -1522,83 +1586,142 @@ function renderRecord(){
   p.innerHTML='';
   p.style.cssText='background:var(--card);border-radius:var(--r);border:1.5px solid var(--bo);padding:.9rem';
 
-  // Title
   const h=document.createElement('h3');
-  h.style.cssText='font-size:.9rem;font-weight:900;color:var(--tx);margin-bottom:.8rem;text-align:center';
-  h.textContent='📊 Elton 的學習記錄';p.appendChild(h);
+  h.style.cssText='font-size:.9rem;font-weight:900;color:#0288D1;margin-bottom:.8rem;text-align:center';
+  h.textContent='🫙 玻璃寶盒收藏';p.appendChild(h);
 
-
-
-  // Summary cards
-  const gems=S.diamonds||[];
   const boxes=S.glassBoxes||[];
-  const summary=document.createElement('div');
-  summary.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.9rem';
-  [
-    ['💎','寶石收藏',gems.length+' 顆'],
-    ['🫙','玻璃寶盒',boxes.length+' 個'],
-  ].forEach(function(arr){
-    const icon=arr[0],label=arr[1],val=arr[2];
-    const card=document.createElement('div');
-    card.style.cssText='background:var(--bg);border-radius:var(--rs);border:1.5px solid var(--bo);padding:.6rem;text-align:center';
-    card.innerHTML='<div style="font-size:1.4rem">'+icon+'</div>'
-      +'<div style="font-size:.68rem;color:var(--t2);margin:.1rem 0">'+label+'</div>'
-      +'<div style="font-size:1rem;font-weight:900;color:var(--tx)">'+val+'</div>';
-    summary.appendChild(card);
-  });
-  p.appendChild(summary);
-
-  // Daily history
-  const days=S.days||{};
-  const keys=Object.keys(days).filter(k=>days[k].c>0).sort().reverse();
-  if(keys.length){
-    const ht=document.createElement('div');
-    ht.style.cssText='font-size:.78rem;font-weight:900;color:var(--tx);margin-bottom:.4rem;border-top:1px solid var(--bo);padding-top:.6rem';
-    ht.textContent='📅 每日記錄';p.appendChild(ht);
-    keys.forEach(k=>{
-      const d=days[k];
-      const score=(d.c||0)*10;
-      const row=document.createElement('div');
-      row.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:.4rem 0;border-bottom:1px solid var(--bo);font-size:.82rem';
-      const isPerfect=score>=100;
-      row.innerHTML='<span style="color:var(--t2)">'+k+'</span>'
-        +'<span style="font-weight:700;color:'+(isPerfect?'#E65100':'var(--tx)')+'">'+score+' 分 '+(isPerfect?'💯':'')+'</span>';
-      p.appendChild(row);
-    });
-  } else {
+  if(!boxes.length){
     const empty=document.createElement('div');
-    empty.style.cssText='text-align:center;color:var(--t2);font-size:.82rem;padding:1rem 0';
-    empty.textContent='還沒有記錄，開始答題吧！';
+    empty.style.cssText='text-align:center;color:var(--t2);font-size:.85rem;padding:2rem 0';
+    empty.innerHTML='還沒有玻璃寶盒<br><span style="font-size:.75rem">集滿10顆寶石可以兌換！</span>';
     p.appendChild(empty);
+    return;
   }
 
-  // Redemption history
-  if(boxes.length){
-    const bt=document.createElement('div');
-    bt.style.cssText='font-size:.78rem;font-weight:900;color:var(--tx);margin:.7rem 0 .4rem;border-top:1px solid var(--bo);padding-top:.6rem';
-    bt.textContent='🫙 兌換紀錄';p.appendChild(bt);
-    boxes.forEach((box,i)=>{
-      const row=document.createElement('div');
-      row.style.cssText='display:flex;justify-content:space-between;padding:.4rem 0;border-bottom:1px solid var(--bo);font-size:.82rem';
-      const typeLabel=box.type==='green'?'🟢 綠點點':'🛁 週末晚睡10分鐘';
-      row.innerHTML='<span style="color:var(--t2)">'+box.date+'</span>'
-        +'<span style="font-weight:700">'+typeLabel+'</span>';
-      p.appendChild(row);
-    });
-  }
-  // Reading history
-  const books=S.books||[];
-  if(books.length){
-    const bt=document.createElement('div');
-    bt.style.cssText='font-size:.78rem;font-weight:900;color:var(--tx);margin:.7rem 0 .4rem;border-top:1px solid var(--bo);padding-top:.6rem';
-    bt.textContent='📚 自主閱讀記錄';p.appendChild(bt);
-    books.slice().reverse().forEach(function(b){
-      const row=document.createElement('div');
-      row.style.cssText='display:flex;justify-content:space-between;align-items:center;padding:.4rem 0;border-bottom:1px solid var(--bo);font-size:.82rem';
-      row.innerHTML='<span>'+b.gem+' 《'+b.title+'》</span>'
-        +'<span style="color:var(--t2);font-size:.72rem">'+b.date+'</span>';
-      p.appendChild(row);
-    });
+  const grid=document.createElement('div');
+  grid.style.cssText='display:grid;grid-template-columns:repeat(2,1fr);gap:10px';
+  boxes.forEach(function(box,i){
+    const card=document.createElement('div');
+    card.style.cssText='background:linear-gradient(135deg,#E3F2FD,#B3E5FC);border:2px solid #4FC3F7;border-radius:var(--r);padding:.8rem .6rem;text-align:center;cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,.1)';
+    const typeLabel=box.type==='green'?'🟢 綠點點':'🛁 晚睡10分鐘';
+    const gemIcons=(box.gems||[]).slice(0,5).map(function(g){return g.icon;}).join('');
+    card.innerHTML='<div style="font-size:2rem">🫙</div>'
+      +'<div style="font-size:.78rem;font-weight:900;color:#0288D1;margin:.2rem 0">寶盒 #'+(i+1)+'</div>'
+      +'<div style="font-size:.7rem;color:var(--t2)">'+typeLabel+'</div>'
+      +'<div style="font-size:.85rem;margin-top:.3rem">'+gemIcons+'</div>'
+      +'<div style="font-size:.62rem;color:var(--t2);margin-top:.2rem">'+box.date+'</div>';
+    card.onclick=function(){
+      try{showBoxDetail(box,i+1);}catch(e){showMsg(e.message);}
+    };
+    grid.appendChild(card);
+  });
+  p.appendChild(grid);
+
+  // ── 武士裝備系統 ──
+  const eqSep=document.createElement('div');
+  eqSep.style.cssText='border-top:2px solid var(--bo);margin:1rem 0 .6rem';
+  p.appendChild(eqSep);
+
+  const eqTitle=document.createElement('div');
+  eqTitle.style.cssText='font-size:.9rem;font-weight:900;color:var(--tx);text-align:center;margin-bottom:.5rem';
+  eqTitle.textContent='⚔️ 武士裝備';
+  p.appendChild(eqTitle);
+
+  // Count gems from all boxes
+  const allBoxGems=[];
+  (S.glassBoxes||[]).forEach(function(box){
+    (box.gems||[]).forEach(function(g){allBoxGems.push(g);});
+  });
+  const rarityCount={common:0,uncommon:0,rare:0,epic:0,legend:0};
+  allBoxGems.forEach(function(g){if(rarityCount[g.rarity]!==undefined)rarityCount[g.rarity]++;});
+
+  // Gem count display
+  const gcRow=document.createElement('div');
+  gcRow.style.cssText='display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:.8rem;font-size:.75rem';
+  [['common','⬜','普通'],['uncommon','🟦','不凡'],['rare','🟣','稀有'],['epic','🟠','史詩'],['legend','🌟','傳說']].forEach(function(arr){
+    const span=document.createElement('span');
+    span.style.cssText='background:var(--bg);border:1px solid var(--bo);border-radius:50px;padding:3px 8px;font-weight:700';
+    span.textContent=arr[1]+' '+rarityCount[arr[0]];
+    gcRow.appendChild(span);
+  });
+  p.appendChild(gcRow);
+
+  // Equipment definitions
+  const EQUIP=[
+    {id:'boots',  icon:'🥾',name:'鐵靴子',  atk:0, def:5,  desc:'穩固步伐',  need:{common:3}},
+    {id:'cape',   icon:'🧥',name:'魔法披風', atk:5, def:0,  desc:'速度加成',  need:{uncommon:5}},
+    {id:'shield', icon:'🛡️',name:'水晶盾牌', atk:0, def:20, desc:'防禦力高',  need:{rare:3}},
+    {id:'sword',  icon:'⚔️',name:'寶石寶劍', atk:20,def:0,  desc:'攻擊力強',  need:{epic:3}},
+    {id:'helmet', icon:'👑',name:'黃金頭盔', atk:10,def:10, desc:'領袖氣場',  need:{legend:1}},
+  ];
+
+  if(!S.equipment)S.equipment={};
+
+  const eqGrid=document.createElement('div');
+  eqGrid.style.cssText='display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:.8rem';
+
+  EQUIP.forEach(function(eq){
+    const owned=S.equipment[eq.id];
+    const needEntries=Object.entries(eq.need);
+    const canForge=!owned&&needEntries.every(function(e){return rarityCount[e[0]]>=(e[1]);});
+    const needTxt=needEntries.map(function(e){
+      const labels={common:'⬜普通',uncommon:'🟦不凡',rare:'🟣稀有',epic:'🟠史詩',legend:'🌟傳說'};
+      return e[1]+'顆'+labels[e[0]];
+    }).join('+');
+
+    const card=document.createElement('div');
+    card.style.cssText='border-radius:var(--r);padding:.7rem .5rem;text-align:center;border:2px solid '+(owned?'#FFD700':canForge?'#66BB6A':'var(--bo)')+';background:'+(owned?'#FFFDE7':canForge?'#F1F8E9':'var(--bg)');
+
+    card.innerHTML='<div style="font-size:2rem">'+eq.icon+'</div>'
+      +'<div style="font-size:.78rem;font-weight:900;color:var(--tx);margin:.2rem 0">'+eq.name+'</div>'
+      +'<div style="font-size:.65rem;color:var(--t2)">⚔️+'+eq.atk+' 🛡️+'+eq.def+'</div>'
+      +'<div style="font-size:.62rem;color:var(--t2);margin:.2rem 0">'+eq.desc+'</div>';
+
+    if(owned){
+      const badge=document.createElement('div');
+      badge.style.cssText='font-size:.65rem;font-weight:900;color:#FF8C00;margin-top:.3rem';
+      badge.textContent='✅ 已擁有';
+      card.appendChild(badge);
+    } else if(canForge){
+      const btn=document.createElement('button');
+      btn.style.cssText='background:linear-gradient(135deg,#66BB6A,#2E7D32);color:#fff;border:none;border-radius:50px;padding:5px 12px;font-size:.7rem;font-weight:900;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-top:.4rem;width:100%';
+      btn.textContent='⚒️ 鍛造';
+      (function(e2){
+        btn.onclick=function(){
+          S.equipment[e2.id]=true;sv();
+          showMsg('⚔️ 鍛造成功！'+e2.icon+' '+e2.name+'已加入裝備！');
+          renderRecord();
+        };
+      })(eq);
+      card.appendChild(btn);
+    } else {
+      const need=document.createElement('div');
+      need.style.cssText='font-size:.62rem;color:var(--t2);margin-top:.3rem';
+      need.textContent='需要：'+needTxt;
+      card.appendChild(need);
+    }
+    eqGrid.appendChild(card);
+  });
+  p.appendChild(eqGrid);
+
+  // Check full set
+  const fullSet=EQUIP.every(function(e){return S.equipment[e.id];});
+  if(fullSet){
+    const title=document.createElement('div');
+    title.style.cssText='background:linear-gradient(135deg,#FFD700,#FF8C00);border-radius:var(--r);padding:.8rem;text-align:center;font-size:.9rem;font-weight:900;color:#fff;box-shadow:0 4px 16px rgba(255,165,0,.5)';
+    title.innerHTML='🌟 恭喜！Elton 已集齊全套裝備<br>💎 寶石武士 稱號解鎖！';
+    p.appendChild(title);
+  } else {
+    // Show total atk/def
+    let totalAtk=0,totalDef=0;
+    EQUIP.forEach(function(e){if(S.equipment[e.id]){totalAtk+=e.atk;totalDef+=e.def;}});
+    if(totalAtk>0||totalDef>0){
+      const stat=document.createElement('div');
+      stat.style.cssText='background:var(--bg);border-radius:var(--rs);padding:.5rem;text-align:center;font-size:.82rem;font-weight:700;color:var(--tx)';
+      stat.innerHTML='目前戰力：⚔️ '+totalAtk+' 攻擊 ／ 🛡️ '+totalDef+' 防禦';
+      p.appendChild(stat);
+    }
   }
 }
 
@@ -1894,6 +2017,65 @@ function showWrongLog(){
   document.getElementById('wrong-modal').style.display='flex';
 }
 
+let hintUsed=false;
+
+function showReviewScreen(){
+  const rs=document.getElementById('review-screen');
+  if(!rs)return;
+
+  const VOWELS='aeiouAEIOU';
+  const CAT_ICONS={'食':'🍎','住':'🏠','行':'🏃','育':'📚','樂':'🎵','動物':'🐘','身體':'🫁','形容詞':'💬','健康':'🤧','自然':'🌿','其他':'🎯'};
+  const CAT_ORDER=['食','住','行','育','樂','動物','身體','形容詞','健康','自然','其他'];
+
+  // Show up to 30 words for review, shuffled
+  const reviewWords=shuffle(words.slice()).slice(0,20);
+
+  // Group by category
+  const cats={};
+  reviewWords.forEach(function(w){
+    const c=w.cat||'其他';
+    if(!cats[c])cats[c]=[];
+    cats[c].push(w);
+  });
+
+  const list=document.getElementById('review-word-list');
+  list.innerHTML='';
+
+  // Header
+  const hdr=document.createElement('div');
+  hdr.style.cssText='font-size:.72rem;color:var(--t2);text-align:center;margin-bottom:.5rem';
+  hdr.textContent='';hdr.style.display='none';
+  list.appendChild(hdr);
+
+  const orderedCats=CAT_ORDER.filter(function(c){return cats[c];});
+  orderedCats.forEach(function(cat){
+    const catWords=cats[cat].slice().sort(function(a,b){return a.word.localeCompare(b.word);});
+    // Category label
+    const cl=document.createElement('div');
+    cl.style.cssText='font-size:.72rem;font-weight:900;color:var(--pr);margin:.5rem 0 .2rem;padding:.2rem .4rem;background:var(--bg);border-radius:var(--rs)';
+    cl.textContent=(CAT_ICONS[cat]||'📌')+' '+cat;
+    list.appendChild(cl);
+
+    catWords.forEach(function(w,i){
+      if(i>0){const hr=document.createElement('div');hr.style.cssText='border-top:1px solid var(--bo);margin:.05rem 0';list.appendChild(hr);}
+      const row=document.createElement('div');
+      row.style.cssText='display:flex;align-items:center;gap:8px;padding:.35rem 0';
+      const emojiEl=document.createElement('span');emojiEl.style.cssText='font-size:1.3rem';emojiEl.textContent=w.emoji||'📝';
+      const txtWrap=document.createElement('div');
+      let wHtml='';
+      for(const ch of w.word){wHtml+=VOWELS.includes(ch)?'<span class="vowel" style="font-weight:900;color:#E53935">'+ch+'</span>':ch;}
+      txtWrap.innerHTML='<span style="font-size:.92rem;font-weight:900">'+wHtml+'</span> <span style="font-size:.75rem;color:var(--t2)">'+w.zh+'</span>';
+      row.appendChild(emojiEl);row.appendChild(txtWrap);list.appendChild(row);
+    });
+  });
+
+  // Hide game, show review modal
+  document.getElementById('game-wrap').style.display='none';
+  const fin=document.getElementById('fin');if(fin)fin.classList.remove('on');
+  rs.style.display='block';
+  rs.style.pointerEvents='auto';
+}
+
 function startRound(){
   // Daily reset: if new day, clear session wrong seen so queue is fresh
   const today=todayK();
@@ -1922,12 +2104,26 @@ function startRound(){
     }
   }
   cur=0;sWrong=0;sCorrect=0;wrongSeen=new Set();wrongLog=[];
+  waitCheck=false;
+  input=[];lbtns=[];
+  bathDone=false;bathDone2=false;
+  hintUsed=false;
+  // Restore hint button
+  const hb=document.getElementById('hint-btn');
+  if(hb){hb.style.opacity='1';hb.style.pointerEvents='auto';hb.textContent='🧚 使用複習小天使';}
   document.getElementById('sc').textContent=0;
   document.getElementById('wc').textContent=0;
   document.getElementById('fin').classList.remove('on');
+  const rs2=document.getElementById('review-screen');
+  if(rs2){rs2.style.display='none';rs2.style.pointerEvents='none';}
+  // Show tabs and progress bar
+  document.getElementById('tabs').style.display='flex';
+  document.getElementById('prog').style.display='block';
   document.getElementById('game-wrap').style.display='block';
   loadQ();
 }
+
+let _loadQRunning=false;
 
 function loadQ(){
   if(cur>=Q.length){
@@ -1935,6 +2131,7 @@ function loadQ(){
     else if(!bathDone2){bathDone2=true;showFin(2);}
     return;
   }
+  waitCheck=false;
   const q=Q[cur];
   renderDots();
   const qnEl=document.getElementById('qn');if(qnEl)qnEl.textContent=cur+1;
@@ -2231,7 +2428,8 @@ function checkFill(q){
     if(typed===correct){
       inp.style.borderColor='var(--gn)';
       const fb2=document.getElementById('fb2');if(fb2)fb2.innerHTML='<span style="color:var(--gn)">✅ 答對了！🎉</span>';
-      if(exEl)exEl.style.display='none';
+      if(q.ex&&exEl){exEl.style.display='block';exEl.textContent='💡 '+q.ex;}
+      else if(exEl)exEl.style.display='none';
       playCheer();
       addCorrect(q.q.replace('___',correct));S.wg=S.wg.filter(x=>x!==q.gi);sv();
       sCorrect+=10;const sc=document.getElementById('sc');if(sc)sc.textContent=sCorrect;
@@ -2268,7 +2466,8 @@ function checkGram(chosen,q,btn){
   if(chosen===correct){
     if(allBtns[chosen]) allBtns[chosen].classList.add('ok');
     document.getElementById('fb2').innerHTML='<span style="color:var(--gn)">✅ 答對了！🎉</span>';
-    exEl.style.display='none';
+    if(q.ex&&exEl){exEl.style.display='block';exEl.textContent='💡 '+q.ex;}
+    else exEl.style.display='none';
     addCorrect(q.q.replace('___',(q.c[correct]||'')));S.wg=S.wg.filter(x=>x!==q.gi);sv();
     sCorrect+=10;document.getElementById('sc').textContent=sCorrect;
     setTimeout(()=>{cur++;loadQ();},q.lv==='A1+'?2000:1500);
@@ -2294,11 +2493,6 @@ function checkGram(chosen,q,btn){
 //  FINISH
 // ═══════════════════════════
 function showFin(round){
-  // 防止重複觸發
-  if(showFin._running) return;
-  showFin._running=true;
-  setTimeout(function(){showFin._running=false;},3000);
-
   document.getElementById('game-wrap').style.display='none';
   const fin=document.getElementById('fin');fin.classList.add('on');
   const score=sCorrect;
@@ -2337,9 +2531,50 @@ function restart(){
 let bathDone=todaySt().c>=10;
 let bathDone2=todaySt().c>=20;
 renderHeader();updateProg();renderDiamonds();
-showTab('game');
-startRound();
-document.getElementById('t-game').addEventListener('click',function(){showTab('game');});
+
+// buildExtraQ — adds one extra spell question for hint penalty
+function buildExtraQ(){
+  const wGood=words.filter(function(w){return !S.ww.includes(w.word);});
+  if(!wGood.length)return null;
+  const w=wGood[Math.floor(Math.random()*wGood.length)];
+  return Object.assign({},w,{type:'spell'});
+}
+
+// Show review screen on load instead of jumping straight to game
+showReviewScreen();
+document.getElementById('review-start-btn').addEventListener('click',function(){
+  startRound();
+});
+document.getElementById('hint-btn').addEventListener('click',function(){
+  try{
+    if(hintUsed){showMsg('複習小天使已用過了！');return;}
+    hintUsed=true;
+    this.style.opacity='0.4';this.style.pointerEvents='none';this.textContent='🧚 已使用';
+    // Add one extra question
+    const extra=buildExtraQ();
+    if(extra)Q.push(extra);
+    // Remove old back button if exists
+    const oldBtn=document.getElementById('hint-back-btn');
+    if(oldBtn)oldBtn.remove();
+    // Show lib tab
+    showTab('lib');
+    // Add back button at top of lib
+    const backBtn=document.createElement('button');
+    backBtn.id='hint-back-btn';
+    backBtn.style.cssText='background:linear-gradient(135deg,var(--pr),#FF6B35);color:#fff;border:none;border-radius:50px;padding:12px 0;font-size:.95rem;font-weight:900;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif;width:100%;margin-bottom:.8rem;box-shadow:0 4px 16px rgba(255,107,53,.4)';
+    backBtn.textContent='✅ 看完了，繼續挑戰！（+1題）';
+    backBtn.addEventListener('click',function(){
+      showTab('game');
+      backBtn.remove();
+    });
+    const lib=document.getElementById('lib');
+    if(lib)lib.insertBefore(backBtn,lib.firstChild);
+  }catch(e){}
+});
+document.getElementById('t-game').addEventListener('click',function(){
+  // 如果遊戲還在進行中，直接顯示遊戲
+  showTab('game');
+});
 document.getElementById('t-lib').addEventListener('click',function(){showTab('lib');});
 document.getElementById('t-gram').addEventListener('click',function(){showTab('gram-panel');});
 document.getElementById('t-gems').addEventListener('click',function(){showTab('gems');});
@@ -2363,6 +2598,12 @@ document.getElementById('lynn-cancel-btn').addEventListener('click',function(){
   document.getElementById('lynn-modal').style.display='none';
 });
 document.getElementById('lynn-modal').addEventListener('click',function(e){
+  if(e.target===this)this.style.display='none';
+});
+document.getElementById('box-modal-close').addEventListener('click',function(){
+  document.getElementById('box-modal').style.display='none';
+});
+document.getElementById('box-modal').addEventListener('click',function(e){
   if(e.target===this)this.style.display='none';
 });
 document.getElementById('wrong-modal-close').addEventListener('click',function(){
