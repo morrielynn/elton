@@ -561,16 +561,16 @@ if(!S.wg)S.wg=[];
 // Default words
 const DEFAULT_WORDS=[
   // 🏠 住 (家居房間)
-  {word:'bedroom',zh:'臥室',emoji:'🛏️',cat:'住'},
+  {word:'bedroom',zh:'臥室',emoji:'🛏️',cat:'住','phrase':'go to bed 去睡覺'},
   {word:'kitchen',zh:'廚房',emoji:'🍳',cat:'住'},
   {word:'bathroom',zh:'浴室',emoji:'🛁',cat:'住'},
   // 🍎 食 (食物)
-  {word:'sugar',zh:'糖',emoji:'🍚',cat:'食'},
-  {word:'lemon',zh:'檸檬',emoji:'🍋',cat:'食'},
-  {word:'butter',zh:'奶油',emoji:'🧈',cat:'食'},
-  {word:'milk',zh:'牛奶',emoji:'🥛',cat:'食'},
+  {word:'sugar',zh:'糖',emoji:'🍚',cat:'食','phrase':'sugar free 無糖'},
+  {word:'lemon',zh:'檸檬',emoji:'🍋',cat:'食','phrase':'lemon juice 檸檬汁'},
+  {word:'butter',zh:'奶油',emoji:'🧈',cat:'食','phrase':'bread and butter 奶油麵包'},
+  {word:'milk',zh:'牛奶',emoji:'🥛',cat:'食','phrase':'milk tea 奶茶'},
   {word:'steak',zh:'牛排',emoji:'🥩',cat:'食'},
-  {word:'cake',zh:'蛋糕',emoji:'🎂',cat:'食'},
+  {word:'cake',zh:'蛋糕',emoji:'🎂',cat:'食','phrase':'birthday cake 生日蛋糕'},
   {word:'potatoes',zh:'馬鈴薯',emoji:'🥔',cat:'食'},
   {word:'popcorn',zh:'爆米花',emoji:'🍿',cat:'食'},
   {word:'crab',zh:'螃蟹',emoji:'🦀',cat:'食'},
@@ -579,34 +579,34 @@ const DEFAULT_WORDS=[
   {word:'hotdog',zh:'熱狗',emoji:'🌭',cat:'食'},
   {word:'crust',zh:'麵包皮',emoji:'🍞',cat:'食'},
   // 🏃 行 (動作/動詞)
-  {word:'eating',zh:'吃東西',emoji:'🍽️',cat:'行'},
+  {word:'eating',zh:'吃東西',emoji:'🍽️',cat:'行','phrase':'eating habits 飲食習慣'},
   {word:'cooking',zh:'煮飯',emoji:'👨‍🍳',cat:'行'},
-  {word:'reading',zh:'閱讀',emoji:'📖',cat:'行'},
-  {word:'sleeping',zh:'睡覺',emoji:'😴',cat:'行'},
-  {word:'running',zh:'跑步',emoji:'🏃',cat:'行'},
+  {word:'reading',zh:'閱讀',emoji:'📖',cat:'行','phrase':'reading book 閱讀書本'},
+  {word:'sleeping',zh:'睡覺',emoji:'😴',cat:'行','phrase':'sleeping early 早睡'},
+  {word:'running',zh:'跑步',emoji:'🏃',cat:'行','phrase':'go running 去跑步'},
   {word:'sleep',zh:'睡覺',emoji:'😴',cat:'行'},
-  {word:'write',zh:'寫字',emoji:'✍️',cat:'行'},
+  {word:'write',zh:'寫字',emoji:'✍️',cat:'行','phrase':'write a letter 寫信'},
   // 📚 育 (學習/學校)
-  {word:'school',zh:'學校',emoji:'🏫',cat:'育'},
-  {word:'practice',zh:'練習',emoji:'✏️',cat:'育'},
+  {word:'school',zh:'學校',emoji:'🏫',cat:'育','phrase':'go to school 去上學'},
+  {word:'practice',zh:'練習',emoji:'✏️',cat:'育','phrase':'practice makes perfect 熟能生巧'},
   {word:'class',zh:'課',emoji:'📚',cat:'育'},
   {word:'game',zh:'遊戲',emoji:'🎮',cat:'育'},
   // 🎵 樂 (娛樂)
   {word:'video',zh:'影片',emoji:'📹',cat:'樂'},
   {word:'shopping',zh:'購物',emoji:'🛒',cat:'樂'},
   {word:'hotel',zh:'飯店',emoji:'🏨',cat:'樂'},
-  {word:'movie',zh:'電影',emoji:'🎬',cat:'樂'},
-  {word:'music',zh:'音樂',emoji:'🎵',cat:'樂'},
-  {word:'guitar',zh:'吉他',emoji:'🎸',cat:'樂'},
+  {word:'movie',zh:'電影',emoji:'🎬',cat:'樂','phrase':'watch a movie 看電影'},
+  {word:'music',zh:'音樂',emoji:'🎵',cat:'樂','phrase':'listen to music 聽音樂'},
+  {word:'guitar',zh:'吉他',emoji:'🎸',cat:'樂','phrase':'play guitar 彈吉他'},
   // 🐘 動物
-  {word:'elephant',zh:'大象',emoji:'🐘',cat:'動物'},
-  {word:'zebra',zh:'斑馬',emoji:'🦓',cat:'動物'},
+  {word:'elephant',zh:'大象',emoji:'🐘',cat:'動物','phrase':'elephant never forgets 大象不忘事'},
+  {word:'zebra',zh:'斑馬',emoji:'🦓',cat:'動物','phrase':'zebra crossing 斑馬線'},
   {word:'monkey',zh:'猴子',emoji:'🐒',cat:'動物'},
   {word:'tiger',zh:'老虎',emoji:'🐯',cat:'動物'},
   {word:'lion',zh:'獅子',emoji:'🦁',cat:'動物'},
-  {word:'animal',zh:'動物',emoji:'🐾',cat:'動物'},
+  {word:'animal',zh:'動物',emoji:'🐾',cat:'動物','phrase':'wild animal 野生動物'},
   // 😊 形容詞
-  {word:'happy',zh:'快樂',emoji:'😊',cat:'形容詞'},
+  {word:'happy',zh:'快樂',emoji:'😊',cat:'形容詞','phrase':'happy birthday 生日快樂'},
   {word:'small',zh:'小的',emoji:'🔅',cat:'形容詞'},
   {word:'scary',zh:'可怕的',emoji:'😱',cat:'形容詞'},
   {word:'sharp',zh:'尖的',emoji:'🔪',cat:'形容詞'},
@@ -616,7 +616,7 @@ const DEFAULT_WORDS=[
   {word:'pretty',zh:'漂亮的',emoji:'🌸',cat:'形容詞'},
   {word:'new',zh:'新的',emoji:'✨',cat:'形容詞'},
   {word:'old',zh:'舊的',emoji:'📦',cat:'形容詞'},
-  {word:'warm',zh:'暖和的',emoji:'🌡️',cat:'形容詞'},
+  {word:'warm',zh:'暖和的',emoji:'🌡️',cat:'形容詞','phrase':'warm up 暖身'},
   // 🗣️ 身體
   {word:'head',zh:'頭',emoji:'🗣️',cat:'身體'},
   {word:'nose',zh:'鼻子',emoji:'👃',cat:'身體'},
@@ -627,14 +627,14 @@ const DEFAULT_WORDS=[
   {word:'tooth',zh:'牙齒',emoji:'🦷',cat:'身體'},
   {word:'stomach',zh:'胃',emoji:'🫄',cat:'身體'},
   // 🤧 健康
-  {word:'cold',zh:'感冒',emoji:'🤧',cat:'健康'},
+  {word:'cold',zh:'感冒',emoji:'🤧',cat:'健康','phrase':'catch a cold 感冒'},
   {word:'cough',zh:'咳嗽',emoji:'😷',cat:'健康'},
   {word:'sneeze',zh:'打噴嚏',emoji:'🤧',cat:'健康'},
   // 🌿 自然
-  {word:'desert',zh:'沙漠',emoji:'🏜️',cat:'自然'},
-  {word:'plant',zh:'植物',emoji:'🌿',cat:'自然'},
+  {word:'desert',zh:'沙漠',emoji:'🏜️',cat:'自然','phrase':'desert island 荒島'},
+  {word:'plant',zh:'植物',emoji:'🌿',cat:'自然','phrase':'plant a tree 種樹'},
   {word:'grass',zh:'草',emoji:'🌾',cat:'自然'},
-  {word:'winter',zh:'冬天',emoji:'❄️',cat:'自然'},
+  {word:'winter',zh:'冬天',emoji:'❄️',cat:'自然','phrase':'winter break 寒假'},
   {word:'frost',zh:'霜',emoji:'❄️',cat:'自然'},
   // 🎯 其他
   {word:'cousin',zh:'表兄弟姊妹',emoji:'👨‍👩‍👧‍👦',cat:'其他'},
@@ -643,29 +643,33 @@ const DEFAULT_WORDS=[
   {word:'scissors',zh:'剪刀',emoji:'✂️',cat:'其他'},
   {word:'fist',zh:'拳頭',emoji:'✊',cat:'其他'},
   {word:'turn',zh:'輪到',emoji:'🔄',cat:'其他'},
-  {word:'today',zh:'今天',emoji:'📅',cat:'其他'},
-  {word:'large',zh:'大的',emoji:'🔆',cat:'形容詞'},
-  {word:'near',zh:'靠近的',emoji:'📍',cat:'形容詞'},
-  {word:'little',zh:'小的',emoji:'🐣',cat:'形容詞'},
-  {word:'safe',zh:'安全的',emoji:'🛡️',cat:'形容詞'},
-  {word:'still',zh:'仍然/靜止',emoji:'🧘',cat:'形容詞'},
-  {word:'early',zh:'早',emoji:'🌅',cat:'形容詞'},
-  {word:'friend',zh:'朋友',emoji:'👫',cat:'其他'},
-  {word:'answer',zh:'回答/答案',emoji:'💬',cat:'育'},
-  {word:'hurry',zh:'趕快',emoji:'🏃',cat:'行'},
-  {word:'together',zh:'一起',emoji:'🤝',cat:'其他'},
-  {word:'taipei',zh:'台北',emoji:'🏙️',cat:'其他'},
-  {word:'taiwan',zh:'台灣',emoji:'🇹🇼',cat:'其他'},
-  {word:'beak',zh:'鳥嘴',emoji:'🐦',cat:'動物'},
-  {word:'feather',zh:'羽毛',emoji:'🪶',cat:'動物'},
-  {word:'leave',zh:'離開/葉子',emoji:'🍃',cat:'自然'},
-  {word:'beach',zh:'海灘',emoji:'🏖️',cat:'自然'},
-  {word:'circus',zh:'馬戲團',emoji:'🎪',cat:'樂'},
-  {word:'library',zh:'圖書館',emoji:'📚',cat:'育'},
-  {word:'hospital',zh:'醫院',emoji:'🏥',cat:'健康'},
+  {word:'today',zh:'今天',emoji:'📅',cat:'其他','phrase':"today's lesson 今天的課"},
+  {word:'large',zh:'大的',emoji:'🔆',cat:'形容詞','phrase':'large size 大號'},
+  {word:'near',zh:'靠近的',emoji:'📍',cat:'形容詞','phrase':'come near 靠近'},
+  {word:'little',zh:'小的',emoji:'🐣',cat:'形容詞','phrase':'little by little 一點一點'},
+  {word:'safe',zh:'安全的',emoji:'🛡️',cat:'形容詞','phrase':'stay safe 保持安全'},
+  {word:'still',zh:'仍然/靜止',emoji:'🧘',cat:'形容詞','phrase':'stand still 站著不動'},
+  {word:'early',zh:'早',emoji:'🌅',cat:'形容詞','phrase':'wake up early 早起'},
+  {word:'friend',zh:'朋友',emoji:'👫',cat:'其他','phrase':'best friend 好朋友'},
+  {word:'answer',zh:'回答/答案',emoji:'💬',cat:'育','phrase':'answer the question 回答問題'},
+  {word:'hurry',zh:'趕快',emoji:'🏃',cat:'行','phrase':'hurry up 快一點'},
+  {word:'together',zh:'一起',emoji:'🤝',cat:'其他','phrase':"let's go together 我們一起走"},
+  {word:'taipei',zh:'台北',emoji:'🏙️',cat:'其他','phrase':'Taipei 101 台北101'},
+  {word:'taiwan',zh:'台灣',emoji:'🇹🇼',cat:'其他','phrase':'made in Taiwan 台灣製造'},
+  {word:'beak',zh:'鳥嘴',emoji:'🐦',cat:'動物','phrase':'bird beak 鳥嘴'},
+  {word:'feather',zh:'羽毛',emoji:'🪶',cat:'動物','phrase':'feather light 輕如羽毛'},
+  {word:'leave',zh:'離開/葉子',emoji:'🍃',cat:'自然','phrase':'leave home 離家'},
+  {word:'beach',zh:'海灘',emoji:'🏖️',cat:'自然','phrase':'go to the beach 去海邊'},
+  {word:'circus',zh:'馬戲團',emoji:'🎪',cat:'樂','phrase':'circus show 馬戲團表演'},
+  {word:'library',zh:'圖書館',emoji:'📚',cat:'育','phrase':'school library 學校圖書館'},
+  {word:'hospital',zh:'醫院',emoji:'🏥',cat:'健康','phrase':'go to hospital 去醫院'},
+  {word:'recycling',zh:'回收',emoji:'♻️',cat:'自然','phrase':'recycling bin 回收桶'},
+  {word:'fun',zh:'有趣的',emoji:'🎉',cat:'形容詞','phrase':'have fun 玩得開心'},
+  {word:'quiet',zh:'安靜的',emoji:'🤫',cat:'形容詞','phrase':'be quiet 保持安靜'},
+  {word:'snort',zh:'噴鼻息',emoji:'😤',cat:'其他','phrase':'snort with laughter 噴笑'},
+  {word:'rubbish',zh:'垃圾',emoji:'🗑️',cat:'其他','phrase':'rubbish bin 垃圾桶'},
 ];
-// Force reset words to latest DEFAULT_WORDS (version bump)
-const WORDS_VER=13;
+const WORDS_VER=14;
 if(S.wordsVer!==WORDS_VER){
   if(!S.words||!S.words.length){
     S.words=DEFAULT_WORDS;
@@ -1556,7 +1560,8 @@ function renderLib(){
         let wHtml=w.emoji+' ';
         for(const c2 of w.word){wHtml+=VOWELS.includes(c2)?'<span class="vowel">'+c2+'</span>':c2;}
         txt.innerHTML=wHtml;
-        const sub=document.createElement('div');sub.className='li-sub';sub.textContent=w.zh;
+        const sub=document.createElement('div');sub.className='li-sub';
+        sub.textContent=w.zh+(w.phrase?' ｜ '+w.phrase:'');
         row.appendChild(txt);row.appendChild(sub);wordListWrap.appendChild(row);
       });
     });
@@ -1862,63 +1867,67 @@ function doLoad(){
 function shuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]}return r;}
 
 function buildQ(){
-  // ── 平均出題系統 ──
-  // 用「循環池」確保每個單字都考到後才重複
   if(!S.seen)S.seen=[];
   if(!S.seenCount)S.seenCount={};
 
-  // 錯題（優先，不受循環限制）
+  // 錯題優先且機率提高（放入3份）
   const wBad=words.filter(function(w){return S.ww.includes(w.word);});
+  const wBadWeighted=[...wBad,...wBad,...wBad]; // 3倍機率
 
-  // 剩餘可用單字（非錯題）
   const wGood=words.filter(function(w){return !S.ww.includes(w.word);});
-
-  // 未考過的（這輪循環中還沒選到的）
   const wUnseen=wGood.filter(function(w){return !S.seen.includes(w.word);});
 
-  // 如果未考過的不夠，重置循環（新一輪開始）
-  if(wUnseen.length<6-wBad.length){
-    // 重置 seen，讓所有單字重新進入池
-    S.seen=wBad.map(function(w){return w.word;}); // 錯題不算已考
-    sv();
+  if(wUnseen.length<6-Math.min(wBad.length,3)){
+    S.seen=wBad.map(function(w){return w.word;});sv();
   }
-
-  // 重新計算未考過的
   const wAvail=wGood.filter(function(w){return !S.seen.includes(w.word);});
-
-  // 隨機選（不按順序，確保每輪內也是隨機）
   const wShuffled=shuffle(wAvail);
-  const needed=Math.max(0,6-wBad.length);
-  const wPick=wShuffled.slice(0,needed);
 
-  // 記錄這次選到的
+  // Fill slots: wrong words first (up to 3), then unseen
+  const wPick=[];
+  const badPick=shuffle(wBadWeighted).slice(0,Math.min(3,wBad.length));
+  const seen_ids=new Set();
+  badPick.forEach(function(w){
+    if(!seen_ids.has(w.word)){seen_ids.add(w.word);wPick.push(w);}
+  });
+  wShuffled.forEach(function(w){
+    if(wPick.length<6&&!seen_ids.has(w.word)){seen_ids.add(w.word);wPick.push(w);}
+  });
+
   wPick.forEach(function(w){
-    S.seen.push(w.word);
+    if(!S.seen.includes(w.word))S.seen.push(w.word);
     S.seenCount[w.word]=(S.seenCount[w.word]||0)+1;
   });
   sv();
 
-  const spells=[...wBad,...wPick].slice(0,6).map(function(w){
-    return Object.assign({},w,{type:'spell'});
-  });
+  const spells=wPick.slice(0,6).map(function(w){return Object.assign({},w,{type:'spell'});});
 
   // ── 文法平均出題（同樣循環機制）──
   if(!S.seenGram)S.seenGram=[];
   const gramsWithIdx=grams.map(function(g,idx){return Object.assign({},g,{gi:idx,type:g.type||'gram'});});
   const gBad=gramsWithIdx.filter(function(x){return S.wg.includes(x.gi);});
+  const gBadWeighted=[...gBad,...gBad,...gBad]; // 3倍機率
   const gGood=gramsWithIdx.filter(function(x){return !S.wg.includes(x.gi);});
   const gUnseen=gGood.filter(function(x){return !S.seenGram.includes(x.gi);});
 
-  if(gUnseen.length<4-gBad.length){
-    S.seenGram=gBad.map(function(x){return x.gi;});
-    sv();
+  if(gUnseen.length<4-Math.min(gBad.length,2)){
+    S.seenGram=gBad.map(function(x){return x.gi;});sv();
   }
   const gAvail=gGood.filter(function(x){return !S.seenGram.includes(x.gi);});
-  const gPick=shuffle(gAvail).slice(0,Math.max(0,4-gBad.length));
-  gPick.forEach(function(x){S.seenGram.push(x.gi);});
+
+  // Fill: wrong first (up to 2), then unseen
+  const gPick=[];
+  const gSeen_ids=new Set();
+  shuffle(gBadWeighted).slice(0,Math.min(2,gBad.length)).forEach(function(x){
+    if(!gSeen_ids.has(x.gi)){gSeen_ids.add(x.gi);gPick.push(x);}
+  });
+  shuffle(gAvail).forEach(function(x){
+    if(gPick.length<4&&!gSeen_ids.has(x.gi)){gSeen_ids.add(x.gi);gPick.push(x);}
+  });
+  gPick.forEach(function(x){if(!S.seenGram.includes(x.gi))S.seenGram.push(x.gi);});
   sv();
 
-  const grms=[...gBad,...gPick].slice(0,4);
+  const grms=gPick.slice(0,4);
 
   // ── 混合排列 S S G S S G S G S G ──
   const mixed=[];
@@ -2017,7 +2026,7 @@ function showWrongLog(){
   document.getElementById('wrong-modal').style.display='flex';
 }
 
-let hintUsed=false;
+let hintCount=0;
 
 function showReviewScreen(){
   const rs=document.getElementById('review-screen');
@@ -2028,7 +2037,7 @@ function showReviewScreen(){
   const CAT_ORDER=['食','住','行','育','樂','動物','身體','形容詞','健康','自然','其他'];
 
   // Show up to 30 words for review, shuffled
-  const reviewWords=shuffle(words.slice()).slice(0,20);
+  const reviewWords=shuffle(words.slice()).slice(0,15);
 
   // Group by category
   const cats={};
@@ -2064,7 +2073,8 @@ function showReviewScreen(){
       const txtWrap=document.createElement('div');
       let wHtml='';
       for(const ch of w.word){wHtml+=VOWELS.includes(ch)?'<span class="vowel" style="font-weight:900;color:#E53935">'+ch+'</span>':ch;}
-      txtWrap.innerHTML='<span style="font-size:.92rem;font-weight:900">'+wHtml+'</span> <span style="font-size:.75rem;color:var(--t2)">'+w.zh+'</span>';
+      txtWrap.innerHTML='<span style="font-size:.92rem;font-weight:900">'+wHtml+'</span> <span style="font-size:.75rem;color:var(--t2)">'+w.zh+'</span>'
+        +(w.phrase?'<div style="font-size:.68rem;color:var(--pr);margin-top:.1rem">📌 '+w.phrase+'</div>':'');
       row.appendChild(emojiEl);row.appendChild(txtWrap);list.appendChild(row);
     });
   });
@@ -2107,7 +2117,7 @@ function startRound(){
   waitCheck=false;
   input=[];lbtns=[];
   bathDone=false;bathDone2=false;
-  hintUsed=false;
+  hintCount=0;
   // Restore hint button
   const hb=document.getElementById('hint-btn');
   if(hb){hb.style.opacity='1';hb.style.pointerEvents='auto';hb.textContent='🧚 使用複習小天使';}
@@ -2314,7 +2324,8 @@ function checkSpell(q){
     // emoji stays, show syllables + small Chinese below
     document.getElementById('wcard-sub').innerHTML=colorVowels(q.word.toUpperCase());
     renderSyllables(correct);
-    document.getElementById('reveal-zh').textContent=q.zh;
+    const zhEl=document.getElementById('reveal-zh');
+    if(zhEl) zhEl.innerHTML=q.zh+(q.phrase?'<div style="font-size:.72rem;color:var(--pr);margin-top:.2rem">📌 '+q.phrase+'</div>':'');
     document.getElementById('fb').innerHTML='<span style="color:var(--gn)">✅ 答對了！🎉</span>';
     addCorrect(q.word);S.ww=S.ww.filter(x=>x!==correct);sv();
     sCorrect+=10;document.getElementById('sc').textContent=sCorrect;
@@ -2496,13 +2507,14 @@ function showFin(round){
   document.getElementById('game-wrap').style.display='none';
   const fin=document.getElementById('fin');fin.classList.add('on');
   const score=sCorrect;
-  const isPerfect=score>=100;
+  const targetScore=100+hintCount*10;
+  const isPerfect=score>=targetScore;
   const roundNum=round||1;
   document.getElementById('fin-st').textContent=isPerfect?'💯':'⭐';
   document.getElementById('fin-msg').textContent='Elton 真努力！';
   document.getElementById('fin-sub').textContent=roundNum===2?'第二輪完成！🎉':'';
   const scoreMsg=document.getElementById('fin-score-msg');
-  scoreMsg.textContent=isPerfect?'Elton 好努力，100分神降臨！🌟':'';
+  scoreMsg.textContent=isPerfect?'Elton 好努力，'+targetScore+'分神降臨！🌟':'';
   // 每輪得一顆寶石
   if(!S.diamonds)S.diamonds=[];
   const d=getRandomDiamond('🏆 第'+roundNum+'輪 '+score+'分');
@@ -2547,9 +2559,9 @@ document.getElementById('review-start-btn').addEventListener('click',function(){
 });
 document.getElementById('hint-btn').addEventListener('click',function(){
   try{
-    if(hintUsed){showMsg('複習小天使已用過了！');return;}
-    hintUsed=true;
-    this.style.opacity='0.4';this.style.pointerEvents='none';this.textContent='🧚 已使用';
+    hintCount++;
+    if(hintCount>3){showMsg('複習小天使今日已用完！');hintCount--;return;}
+    this.style.opacity='0.4';this.style.pointerEvents='none';this.textContent='🧚 已使用('+hintCount+')';
     // Add one extra question
     const extra=buildExtraQ();
     if(extra)Q.push(extra);
