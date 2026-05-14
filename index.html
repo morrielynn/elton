@@ -668,8 +668,20 @@ const DEFAULT_WORDS=[
   {word:'quiet',zh:'安靜的',emoji:'🤫',cat:'形容詞','phrase':'be quiet 保持安靜'},
   {word:'snort',zh:'噴鼻息',emoji:'😤',cat:'其他','phrase':'snort with laughter 噴笑'},
   {word:'rubbish',zh:'垃圾',emoji:'🗑️',cat:'其他','phrase':'rubbish bin 垃圾桶'},
+  {word:'bears',zh:'熊（複數）',emoji:'🐻',cat:'動物','phrase':'polar bears 北極熊'},
+  {word:'lions',zh:'獅子（複數）',emoji:'🦁',cat:'動物','phrase':'lion cubs 小獅子'},
+  {word:'monkeys',zh:'猴子（複數）',emoji:'🐒',cat:'動物','phrase':'monkey bars 單槓'},
+  {word:'tigers',zh:'老虎（複數）',emoji:'🐯',cat:'動物','phrase':'tiger stripes 虎紋'},
+  {word:'zebras',zh:'斑馬（複數）',emoji:'🦓',cat:'動物','phrase':'zebra crossing 斑馬線'},
+  // ── Do you like ___? ──
+  {q:'___ you like bears?',c:['Do','Does','Did'],a:0,ex:'問喜好用 Do you like...?',lv:'A1'},
+  {q:'Do you like lions? Yes, ___ .',c:['I do','I does','I like'],a:0,ex:'肯定回答：Yes, I do.',lv:'A1'},
+  {q:"Do you like tigers? No, ___ .",c:["I don't","I doesn't","I not"],a:0,ex:"否定回答：No, I don't.",lv:'A1'},
+  {q:"___ you like monkeys?",c:['Do','Does','Are'],a:0,ex:'問喜好用 Do you like...?',lv:'A1'},
+  {q:"No, I ___ . I like zebras.",c:["don't","doesn't","not"],a:0,ex:"否定：I don't like，表示不喜歡",lv:'A1'},
+  {q:"Does she ___ lions?",c:['like','likes','liked'],a:0,ex:'Does she like... 後面動詞用原形',lv:'A1+'},
 ];
-const WORDS_VER=14;
+const WORDS_VER=15;
 if(S.wordsVer!==WORDS_VER){
   if(!S.words||!S.words.length){
     S.words=DEFAULT_WORDS;
