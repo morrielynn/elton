@@ -668,6 +668,18 @@ const DEFAULT_WORDS=[
   {word:'quiet',zh:'安靜的',emoji:'🤫',cat:'形容詞','phrase':'be quiet 保持安靜'},
   {word:'snort',zh:'噴鼻息',emoji:'😤',cat:'其他','phrase':'snort with laughter 噴笑'},
   {word:'rubbish',zh:'垃圾',emoji:'🗑️',cat:'其他','phrase':'rubbish bin 垃圾桶'},
+  {word:'ready',zh:'準備好了',emoji:'✅',cat:'形容詞','phrase':'are you ready 你準備好了嗎'},
+  {word:'very',zh:'非常',emoji:'💯',cat:'形容詞','phrase':'very good 非常好'},
+  {word:'dinner',zh:'晚餐',emoji:'🍽️',cat:'食','phrase':'have dinner 吃晚餐'},
+  {word:'grandma',zh:'奶奶/外婆',emoji:'👵',cat:'其他','phrase':'grandma loves me 奶奶愛我'},
+  {word:'apartment',zh:'公寓',emoji:'🏢',cat:'住','phrase':'apartment building 公寓大樓'},
+  {word:'bakery',zh:'麵包店',emoji:'🥐',cat:'食','phrase':'go to the bakery 去麵包店'},
+  {word:'drugstore',zh:'藥局',emoji:'💊',cat:'健康','phrase':'go to the drugstore 去藥局'},
+  {word:'museum',zh:'博物館',emoji:'🏛️',cat:'育','phrase':'visit the museum 參觀博物館'},
+  {word:'neighbor',zh:'鄰居',emoji:'🏠',cat:'其他','phrase':'friendly neighbor 友善的鄰居'},
+  {word:'chips',zh:'薯片',emoji:'🍟',cat:'食','phrase':'fish and chips 炸魚薯條'},
+  {word:'help',zh:'幫忙',emoji:'🆘',cat:'行','phrase':'help me please 請幫幫我'},
+  {word:'please',zh:'請',emoji:'🙏',cat:'其他','phrase':'yes please 好的，謝謝'},
   {word:'bears',zh:'熊（複數）',emoji:'🐻',cat:'動物','phrase':'polar bears 北極熊'},
   {word:'lions',zh:'獅子（複數）',emoji:'🦁',cat:'動物','phrase':'lion cubs 小獅子'},
   {word:'monkeys',zh:'猴子（複數）',emoji:'🐒',cat:'動物','phrase':'monkey bars 單槓'},
@@ -681,7 +693,7 @@ const DEFAULT_WORDS=[
   {q:"No, I ___ . I like zebras.",c:["don't","doesn't","not"],a:0,ex:"否定：I don't like，表示不喜歡",lv:'A1'},
   {q:"Does she ___ lions?",c:['like','likes','liked'],a:0,ex:'Does she like... 後面動詞用原形',lv:'A1+'},
 ];
-const WORDS_VER=16;
+const WORDS_VER=17;
 if(S.wordsVer!==WORDS_VER){
   if(!S.words||!S.words.length){
     S.words=DEFAULT_WORDS;
@@ -1285,35 +1297,76 @@ function showWrongDetail(typed,correct,q){
 }
 
 function showLynnModal(){
+  const modal=document.getElementById('lynn-modal');
+  if(!modal)return;
+
+  // Reset modal content
   const btns=document.getElementById('lynn-rarity-btns');
   btns.innerHTML='';
-  const colors={'common':'#B4B2A9','uncommon':'#85B7EB','rare':'#AFA9EC','epic':'#EF9F27','legend':'#FFD700'};
-  RARITY.forEach(function(rt){
-    const b=document.createElement('button');
-    b.style.cssText='border:2px solid '+colors[rt.id]+';background:'+rt.bg+';border-radius:var(--rs);padding:10px 6px;font-size:.82rem;font-weight:700;cursor:pointer;color:var(--tx)';
-    b.innerHTML=rt.star+'<br>'+rt.name+'<br><span style="font-size:.65rem;color:var(--t2)">'+rt.prob+'%</span>';
-    b.addEventListener('click',function(){
-      const note=document.getElementById('lynn-note').value.trim()||'Lynn 新增';
-      const pool=DM_GEMS.filter(function(g){return g.rarity===rt.id;});
-      const g=pool[Math.floor(Math.random()*pool.length)];
-      const d=new Date();
-      const dateStr=d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate();
-      if(!S.diamonds)S.diamonds=[];
-      S.diamonds.push({icon:g.icon,name:g.name,rarity:rt.id,date:dateStr,word:'✨ '+note});
-      sv();renderDiamonds();
-      document.getElementById('lynn-modal').style.display='none';
-      document.getElementById('lynn-note').value='';
-      const fb=document.createElement('div');
-      fb.style.cssText='position:fixed;top:20%;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#CE93D8,#7B1FA2);color:#fff;border-radius:var(--r);padding:.9rem 1.4rem;font-size:.95rem;font-weight:900;z-index:998;text-align:center;max-width:88vw';
-      fb.innerHTML='✨ Lynn 新增了一顆 '+g.icon+' '+g.name+'！';
-      document.body.appendChild(fb);
-      setTimeout(function(){fb.remove();},2500);
-      const gemsPanel=document.getElementById('gems');
-      if(gemsPanel&&gemsPanel.style.display!=='none') renderGemsPanel();
-    });
-    btns.appendChild(b);
+  document.getElementById('lynn-note').value='';
+
+  // Step 1: Password
+  btns.innerHTML='<div style="font-size:.78rem;color:var(--t2);margin-bottom:.5rem;text-align:center">請輸入密碼</div>'
+    +'<input id="lynn-pw" type="password" placeholder="密碼..." style="width:100%;box-sizing:border-box;border:1.5px solid var(--bo);border-radius:var(--rs);padding:8px 12px;font-size:1rem;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:var(--tx);background:var(--bg);margin-bottom:.5rem;text-align:center;letter-spacing:.3rem">'
+    +'<button id="lynn-pw-btn" style="background:linear-gradient(135deg,#CE93D8,#7B1FA2);color:#fff;border:none;border-radius:50px;padding:9px 0;font-size:.88rem;font-weight:900;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,sans-serif;width:100%">確認</button>';
+
+  document.getElementById('lynn-pw-btn').addEventListener('click',function(){
+    const pw=document.getElementById('lynn-pw').value;
+    if(pw!=='0107'){showMsg('密碼錯誤！');return;}
+    // Show gem selection
+    showLynnGemSelect();
   });
-  document.getElementById('lynn-modal').style.display='flex';
+
+  modal.style.display='flex';
+}
+
+function showLynnGemSelect(){
+  const btns=document.getElementById('lynn-rarity-btns');
+  btns.innerHTML='<div style="font-size:.78rem;font-weight:900;color:var(--t2);margin-bottom:.5rem;text-align:center">選擇要新增的寶石</div>';
+
+  // Group gems by rarity
+  const RARITY_ORDER=['common','uncommon','rare','epic','legend'];
+  const rarityLabels={common:'⬜ 普通',uncommon:'🟦 不凡',rare:'🟣 稀有',epic:'🟠 史詩',legend:'🌟 傳說'};
+
+  RARITY_ORDER.forEach(function(rid){
+    const pool=DM_GEMS.filter(function(g){return g.rarity===rid;});
+    const rt=RARITY.find(function(r){return r.id===rid;})||RARITY[0];
+
+    const sec=document.createElement('div');
+    sec.style.cssText='margin-bottom:.5rem';
+    const label=document.createElement('div');
+    label.style.cssText='font-size:.68rem;font-weight:900;color:'+rt.border+';margin-bottom:.3rem';
+    label.textContent=rarityLabels[rid];
+    sec.appendChild(label);
+
+    const row=document.createElement('div');
+    row.style.cssText='display:flex;gap:6px;flex-wrap:wrap';
+
+    pool.forEach(function(g){
+      const btn=document.createElement('button');
+      btn.style.cssText='background:'+rt.bg+';border:2px solid '+rt.border+';border-radius:var(--rs);padding:6px 8px;font-size:.8rem;font-weight:700;cursor:pointer;color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,sans-serif';
+      btn.innerHTML=g.icon+' '+g.name.split(' ')[0];
+      btn.addEventListener('click',function(){
+        const note=document.getElementById('lynn-note').value.trim()||'Lynn 新增';
+        const d=new Date();
+        const dateStr=d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate();
+        if(!S.diamonds)S.diamonds=[];
+        S.diamonds.push({icon:g.icon,name:g.name,rarity:rid,date:dateStr,word:'✨ '+note});
+        sv();renderDiamonds();
+        document.getElementById('lynn-modal').style.display='none';
+        const fb=document.createElement('div');
+        fb.style.cssText='position:fixed;top:20%;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#CE93D8,#7B1FA2);color:#fff;border-radius:var(--r);padding:.9rem 1.4rem;font-size:.95rem;font-weight:900;z-index:998;text-align:center;max-width:88vw';
+        fb.innerHTML='✨ 新增了一顆 '+g.icon+' '+g.name+'！';
+        document.body.appendChild(fb);
+        setTimeout(function(){fb.remove();},2500);
+        const gemsPanel=document.getElementById('gems');
+        if(gemsPanel&&gemsPanel.style.display!=='none') renderGemsPanel();
+      });
+      row.appendChild(btn);
+    });
+    sec.appendChild(row);
+    btns.appendChild(sec);
+  });
 }
 
 function showReadModal(){
@@ -1416,7 +1469,7 @@ function redeemGems(type){
     gems:gems.slice(0,10)
   });
   S.diamonds=gems.slice(10);
-  const k=todayKey();
+  const k=todayK();
   S.days[k]={c:0,w:0};
   bathDone=false;bathDone2=false;
   sv();renderHeader();updateProg();renderDiamonds();renderGemsPanel();
@@ -2049,8 +2102,22 @@ function showReviewScreen(){
   const CAT_ICONS={'食':'🍎','住':'🏠','行':'🏃','育':'📚','樂':'🎵','動物':'🐘','身體':'🫁','形容詞':'💬','健康':'🤧','自然':'🌿','其他':'🎯'};
   const CAT_ORDER=['食','住','行','育','樂','動物','身體','形容詞','健康','自然','其他'];
 
-  // Show up to 30 words for review, shuffled
-  const reviewWords=shuffle(words.slice()).slice(0,15);
+  // Build today's 6 quiz words
+  if(!S.seen)S.seen=[];
+  const wBad=words.filter(function(w){return S.ww.includes(w.word);});
+  const wGood=words.filter(function(w){return !S.ww.includes(w.word);});
+  const wAvail=wGood.filter(function(w){return !S.seen.includes(w.word);});
+  const wPool=wAvail.length>=6-Math.min(wBad.length,3)?wAvail:wGood;
+
+  const badPick=shuffle(wBad.slice()).slice(0,Math.min(3,wBad.length));
+  const seenIds=new Set(badPick.map(function(w){return w.word;}));
+  const goodPick=shuffle(wPool).filter(function(w){return !seenIds.has(w.word);}).slice(0,6-badPick.length);
+  const todayWords=[...badPick,...goodPick].slice(0,6);
+
+  // Add 6 extra words for broader review (not in today's quiz)
+  const todayIds=new Set(todayWords.map(function(w){return w.word;}));
+  const extraWords=shuffle(words.filter(function(w){return !todayIds.has(w.word);})).slice(0,6);
+  const reviewWords=[...todayWords,...extraWords];
 
   // Group by category
   const cats={};
@@ -2065,8 +2132,8 @@ function showReviewScreen(){
 
   // Header
   const hdr=document.createElement('div');
-  hdr.style.cssText='font-size:.72rem;color:var(--t2);text-align:center;margin-bottom:.5rem';
-  hdr.textContent='';hdr.style.display='none';
+  hdr.style.cssText='font-size:.75rem;font-weight:700;color:var(--t2);text-align:center;margin-bottom:.5rem';
+  hdr.innerHTML='📖 複習 '+reviewWords.length+' 個單字・<span style="color:var(--pr)">🎯 今日考 6 個</span>';
   list.appendChild(hdr);
 
   const orderedCats=CAT_ORDER.filter(function(c){return cats[c];});
@@ -2566,7 +2633,12 @@ function buildExtraQ(){
 }
 
 // Show review screen on load instead of jumping straight to game
-showReviewScreen();
+try{showReviewScreen();}catch(e){
+  // If review fails, go straight to game
+  document.getElementById('tabs').style.display='flex';
+  document.getElementById('prog').style.display='block';
+  showTab('game');startRound();
+}
 document.getElementById('review-start-btn').addEventListener('click',function(){
   startRound();
 });
